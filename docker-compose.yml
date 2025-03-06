@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+  db_hotel:
+    build: 
+      context: ./MySQL
+      dockerfile: Dockerfile
+    container_name: hotel_db_parcial_juan
+    restart: always
+    ports:
+      - 5500:3306
+    volumes:
+      - ./Config/mysql:/var/lib/mysql
+    hostname: apps_database
+    networks:
+      - hotel_apps
+    healthcheck:
+        test: ["CMD","mysql", "-u", "root", "-photel123"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+# --------------------------------------------------------------------
+  # - The adminer is a tool for managing content in databases.
+  adminer:
+    image: adminer
+    container_name: adminer_parcial_juan
+    restart: always
+    ports:
+      - 8000:8080
+    networks:
+      - hotel_apps
+# --------------------------------------------------------------------
+
+networks:
+  hotel_apps:
+      driver: bridge
+      name: hotel_apps
